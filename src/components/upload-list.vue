@@ -20,9 +20,6 @@
         <my-progress v-if="file.status === 'pending'" :percent="file.percent" :chunks="file.totalChunks"></my-progress>
       </div>
 
-      <span v-if="file.status === 'success'" class="go-upload-list-item-delete" @click="onCopy(file.url)">
-          <update-icon name="copy"></update-icon>
-      </span>
       <span v-if="file.status === 'failure'" class="go-upload-list-item-delete" @click="onUpload(file)">
           <update-icon name="upload"></update-icon>
       </span>
@@ -58,9 +55,6 @@ export default {
     },
     onDelete(file) {
       this.$emit('on-delete', file);
-    },
-    onCopy(url) {
-      this.$emit('on-copy', url);
     },
     onUpload(file) {
       this.$emit('on-reUpload', file);

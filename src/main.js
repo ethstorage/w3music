@@ -10,6 +10,7 @@ import store from './store';
 
 import 'element-ui/lib/theme-chalk/index.css';
 import './assets/css/all.css';
+import './assets/font/font.css';
 
 Vue.use(Element)
 Vue.use(AsyncComputed, {

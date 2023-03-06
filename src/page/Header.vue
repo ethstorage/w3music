@@ -6,6 +6,8 @@
       </b-navbar-item>
     </template>
     <template #end>
+      <b-navbar-item tag="router-link" to="/upload">Upload</b-navbar-item>
+      <b-navbar-item tag="router-link" to="/mint">Mint</b-navbar-item>
       <b-navbar-item class="connection" tag="div">
         <Wallet/>
       </b-navbar-item>
@@ -36,18 +38,43 @@ $family-sans-serif: KGBrokenVesselsSketch;
 .nav-container {
   background: transparent;
 }
-
-.connection {
-  cursor: default !important;
+.nav-container a {
+  color: #212121;
+  font-size: 18px;
+  font-family: AlibabaPuHuiTiR;
 }
-
-.connection:hover {
-  background-color: transparent !important;
+.navbar-item {
+  padding: 0.8rem 1.5rem;
+}
+a.navbar-item:focus-within,
+a.navbar-item:hover,
+a.navbar-item.is-active,
+.router-link-exact-active,
+.navbar-item:focus,
+.navbar-link:focus,
+.navbar-link:focus-within,
+.navbar-link:hover,
+.navbar-link.is-active {
+  color: #52DEFF!important;
+  background-color:transparent!important;
+}
+:focus {
+  outline: -webkit-focus-ring-color auto 0px;
+}
+.navbar {
+  background-color: transparent!important;
 }
 
 .logo {
   min-height: 36px;
   max-height: 36px;
+}
+
+.connection {
+  cursor: default !important;
+}
+.connection:hover {
+  background-color: transparent !important;
 }
 
 @media screen and (max-width: 420px) {
@@ -57,6 +84,12 @@ $family-sans-serif: KGBrokenVesselsSketch;
   .navbar-menu {
     background: #F9F8FD;
     border-radius: 10px;
+  }
+  .navbar-brand .navbar-item {
+    justify-content: center;
+  }
+  .nav {
+    padding-bottom: 0;
   }
 }
 </style>

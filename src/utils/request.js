@@ -3,7 +3,7 @@ const sha3 = require('js-sha3').keccak_256;
 
 const FileContractInfo = {
   abi: [
-    "function writeChunk(bytes memory name, uint256 chunkId, bytes calldata data) public payable",
+    "function writeChunk(uint256 fileType, uint256 chunkId, bytes memory name, bytes calldata data) public payable",
     "function remove(bytes memory name) external returns (uint256)",
     "function removes(bytes[] memory names) public",
     "function countChunks(bytes memory name) external view returns (uint256)",
@@ -61,23 +61,16 @@ const clearOldFile = async (fileContract, chunkSize, hexName) => {
 
 export const request = async ({
   contractAddress,
-  dirPath,
+  fileContractAddress,
+  fileType,
   file,
   onSuccess,
   onError,
   onProgress
 }) => {
-  if (!window.ethereum) {
-    onError(new Error("Can't find metamask"));
-    return;
-  }
   let account;
   try {
     account = await window.ethereum.enable();
-    if (!account) {
-      onError(new Error("Can't get Account"));
-      return;
-    }
   } catch (e) {
     onError(new Error("Can't get Account"));
     return;
@@ -85,12 +78,12 @@ export const request = async ({
 
 
   const rawFile = file.raw;
-  const content = await readFile(rawFile);
   // file name
-  const name = dirPath + rawFile.name;
+  const name = rawFile.name;
   const hexName = stringToHex(name);
-  // const hexType = stringToHex(rawFile.type);
+
   // Data need to be sliced if file > 475K
+  const content = await readFile(rawFile);
   let fileSize = rawFile.size;
   let chunks = [];
   if (fileSize > 475 * 1024) {
@@ -135,8 +128,7 @@ export const request = async ({
         break;
       }
 
-      console.log(fileSize, chunk.length, ethers.utils.parseEther(cost.toString()), hexData.length)
-      const tx = await fileContract.writeChunk(hexName, index, hexData, {
+      const tx = await fileContract.writeChunk(fileType, index, hexName, hexData, {
         value: ethers.utils.parseEther(cost.toString())
       });
       console.log(`Transaction Id: ${tx.hash}`);
@@ -153,8 +145,8 @@ export const request = async ({
     }
   }
   if (uploadState) {
-    const url = "https://galileo.web3q.io/file.w3q/" + account + "/" + name;
-    onSuccess({ path: url});
+    const url = "https://" + fileContractAddress + ".w3q-g.w3link.io/" + account + "-" + name;
+    onSuccess({path: url});
   } else {
     if (notEnoughBalance) {
       onError(new NotEnoughBalance('Not enough balance'));

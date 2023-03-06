@@ -12,7 +12,7 @@
     <div v-else class="go-upload-trigger" @click="onClickTrigger">
       <slot></slot>
     </div>
-    <upload-list v-if="enable && showList" @on-delete="onDelete" @on-reUpload="onReUpload" @on-copy="onCopy" :files="this.files" />
+    <upload-list v-if="enable && showList" @on-delete="onDelete" @on-reUpload="onReUpload" :files="this.files" />
   </div>
 </template>
 
@@ -20,7 +20,6 @@
 import {NotEnoughBalance, request} from '@/utils/request';
 import UploadList from './upload-list';
 import UploadDragger from './upload-dragger';
-const copy = require('clipboard-copy')
 
 const sha3 = require('js-sha3').keccak_256;
 
@@ -30,11 +29,11 @@ export default {
   name: 'w3q-deployer',
   components: { UploadDragger, UploadList },
   props: {
-    fileContract: {
+    controlContract: {
       type: String,
       default: ""
     },
-    dirPath: {
+    fileContract: {
       type: String,
       default: ""
     },
@@ -68,7 +67,7 @@ export default {
   },
   computed: {
     enable() {
-      return this.fileContract !== null;
+      return this.controlContract !== null;
     }
   },
   methods: {
@@ -140,8 +139,9 @@ export default {
     normalizeReq (file) {
       const { uid } = file;
       this.reqs[uid] = {
-        contractAddress: this.fileContract,
-        dirPath: this.dirPath,
+        contractAddress: this.controlContract,
+        fileContractAddress: this.fileContract,
+        fileType: this.accept === 'audio/*' ? 0 : 1,
         file: file,
         onSuccess: this.handleSuccess.bind(this, file),
         onError: this.handleError.bind(this, file),
@@ -203,14 +203,6 @@ export default {
       this.onProgress(event, file, this.files);
     },
 
-    onCopy(url) {
-      copy(url);
-      this.$notify({
-        title: 'Success',
-        message: 'Copy Success',
-        type: 'success'
-      });
-    },
     onDelete (file) {
       const i = this.files.indexOf(file);
       this.files.splice(i, 1);

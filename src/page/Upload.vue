@@ -1,7 +1,7 @@
 <template>
   <div class="upload">
-    <img class="home-logo" src="../assets/home.png"/>
-    <w3q-deployer multiple :fileContract="contract" style="width: 500px"/>
+    <div class="upload-title">Upload your music files.</div>
+    <w3q-deployer accept="audio/*" :controlContract="contract" :fileContract="fileContract" style="width: 600px"/>
   </div>
 </template>
 
@@ -14,8 +14,15 @@ export default {
   computed: {
     contract() {
       if (this.$store.state.chainConfig && this.$store.state.chainConfig.chainID) {
-        const {FileBoxController} = this.$store.state.chainConfig;
-        return FileBoxController;
+        const {W3MusicController} = this.$store.state.chainConfig;
+        return W3MusicController;
+      }
+      return null;
+    },
+    fileContract() {
+      if (this.$store.state.chainConfig && this.$store.state.chainConfig.chainID) {
+        const {W3MusicNFT} = this.$store.state.chainConfig;
+        return W3MusicNFT;
       }
       return null;
     }
@@ -35,31 +42,12 @@ export default {
   flex-direction: column;
   align-items: center;
 }
-.home-logo {
-  margin-top: 35px;
-  width: 230px;
-}
 
-.title {
+.upload-title {
   font-size: 30px;
-  color: #333333;
-  margin-bottom: 55px;
-  margin-top: 30px;
-  line-height: 50px;
-}
-
-.profile-btn {
-  background-color: #52DEFF;
-  margin-top: 15px;
-  font-size: 23px;
-  width: 190px;
-  height: 50px;
-  border: 1px solid transparent;
-  border-radius: 35px !important;
-}
-.profile-btn:focus,
-.profile-btn:hover {
-  border: 1px solid transparent;
-  background-color: #52DEFFBB;
+  color: black;
+  margin: 80px 0 60px;
+  line-height: 30px;
+  font-family: AlibabaPuHuiTiM;
 }
 </style>
