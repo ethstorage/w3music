@@ -1,7 +1,11 @@
 <template>
   <div class="upload">
-    <div class="upload-title">Upload your music files.</div>
-    <w3q-deployer accept="audio/*" :controlContract="contract" :fileContract="fileContract" style="width: 600px"/>
+    <el-radio-group v-model="acceptIndex" :disabled="acceptType" class="accept-type">
+      <el-radio-button label="Music"></el-radio-button>
+      <el-radio-button label="Image"></el-radio-button>
+    </el-radio-group>
+    <div class="upload-title"> {{ this.acceptText }}</div>
+    <w3q-deployer :accept="accept" :controlContract="contract" :fileContract="fileContract" style="width: 600px"/>
   </div>
 </template>
 
@@ -9,8 +13,13 @@
 import W3qDeployer from '@/components/w3q-deployer.vue';
 
 export default {
-  name: 'Home',
+  name: 'Upload',
   components: {W3qDeployer},
+  data: () => {
+    return {
+      acceptIndex: 'Music',
+    };
+  },
   computed: {
     contract() {
       if (this.$store.state.chainConfig && this.$store.state.chainConfig.chainID) {
@@ -25,11 +34,25 @@ export default {
         return W3MusicNFT;
       }
       return null;
+    },
+    acceptType() {
+      return this.$route.params.type;
+    },
+    acceptText() {
+      return this.acceptIndex === 'Music' ? 'Upload your music files.' : 'Upload your image files.';
+    },
+    accept() {
+      return this.acceptIndex === 'Music' ? "audio/*" : 'image/*';
     }
   },
   methods: {
-    goUpload() {
-      this.$router.push({path: "/upload"});
+    goProfile() {
+      this.$router.push({path: "/address/" + this.currentAccount});
+    }
+  },
+  mounted() {
+    if (this.acceptType && this.acceptType === 'img') {
+      this.acceptIndex = 'Images';
     }
   }
 }
@@ -43,11 +66,16 @@ export default {
   align-items: center;
 }
 
+.accept-type {
+  align-self: end;
+  margin: 60px 0 80px;
+}
+
 .upload-title {
   font-size: 30px;
   color: black;
-  margin: 80px 0 60px;
   line-height: 30px;
+  margin-bottom: 60px;
   font-family: AlibabaPuHuiTiM;
 }
 </style>

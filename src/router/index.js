@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Home from '../page/Home.vue';
 import Profile from '../page/Profile.vue';
 import Upload from '../page/Upload.vue';
+import Mint from '../page/Mint.vue';
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,16 @@ const routes = [
     path: '/upload',
     name: 'Upload',
     component: Upload,
+  },
+  {
+    path: '/upload/:type',
+    name: 'Upload',
+    component: Upload,
+  },
+  {
+    path: '/mint',
+    name: 'Mint',
+    component: Mint,
   },
 ];
 

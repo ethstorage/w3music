@@ -10,8 +10,6 @@
     <div v-else class="user">
       <div class="account">
         {{ this.accountShort }}
-        &nbsp;|&nbsp;
-        {{ this.networkId === 3334 ? "Galileo Testnet": "Mainnet" }}
       </div>
       <div class="favorite" @click.stop="goProfile"/>
     </div>
