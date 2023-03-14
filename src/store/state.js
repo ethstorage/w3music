@@ -5,6 +5,6 @@ export const chains = [{
 },
 {
   chainID: '0xd06',
-  W3MusicController:'0xcfE7a86d24Acd641d86e91808d37F1B3e0bFbF9c',
-  W3MusicNFT:'0xfA7D919594f777c094ed66B1D910FcCB92cE58a9',
+  W3MusicController:'0x1dee7103899890b0a53160f39bc4438c7ABb77f8',
+  W3MusicNFT:'0xE5fc7135140F8d3b8e424c2858273bD537656AAE',
 }];

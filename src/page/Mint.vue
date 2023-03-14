@@ -19,17 +19,19 @@
       <el-select v-model="file" class="mint-item-input" placeholder="select the uploaded music file">
         <el-option v-for="item in musics" :key="item" :label="item" :value="item"></el-option>
       </el-select>
-      <img src="../assets/share.png" class="mint-item-icon"/>
+      <i class="el-icon-paperclip mint-item-icon" @click="onUploadMusic"></i>
     </div>
     <div class="mint-item">
       <span class="mint-item-label">Music Cover</span>
       <el-select v-model="cover" class="mint-item-input" placeholder="select the uploaded image file">
         <el-option v-for="item in covers" :key="item" :label="item" :value="item"></el-option>
       </el-select>
-      <img src="../assets/share.png" class="mint-item-icon"/>
+      <i class="el-icon-paperclip mint-item-icon" @click="onUploadCover"/>
     </div>
 
-    <el-button class="mint-button" type="primary" :disabled="isDisabled" @click="onSubmit">Mint</el-button>
+    <el-button class="mint-button" type="primary" :loading="loading" :disabled="isDisabled" @click="onSubmit">
+      Mint
+    </el-button>
   </div>
 </template>
 
@@ -44,6 +46,7 @@ export default {
       describe: '',
       cover: '',
       file: '',
+      loading: false,
     };
   },
   computed: {
@@ -88,6 +91,7 @@ export default {
   methods: {
     async onSubmit() {
       // this.$router.push({path: "/address/" + this.currentAccount});
+      this.loading = true;
       const result = await mint(this.contract, this.file, this.name, this.describe, this.cover);
       if (result) {
         this.$message({
@@ -99,6 +103,13 @@ export default {
         this.cover = '';
         this.file = '';
       }
+      this.loading = false;
+    },
+    onUploadMusic() {
+      this.$router.push({path: "/upload/music"});
+    },
+    onUploadCover() {
+      this.$router.push({path: "/upload/img"});
     }
   },
 }
@@ -147,15 +158,26 @@ export default {
   height: 40px;
   padding: 10px;
   margin-left: 5px;
+  cursor: pointer;
 }
 
 .mint-button {
-  background-color: #52DEFF;
+  background: #52DEFF;
   margin-top: 30px;
   font-size: 18px;
   width: 150px;
   height: 40px;
   border: 1px solid transparent;
   border-radius: 35px !important;
+}
+
+.mint-button:hover {
+  border: 1px solid #cccccc;
+  background: rgba(82, 222, 255, 0.9);
+}
+
+.mint-button:disabled {
+  border: 1px solid #cccccc;
+  background: #cccccc;
 }
 </style>

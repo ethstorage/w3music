@@ -1,83 +1,58 @@
 <template>
   <div>
-    <div v-if="!this.result" class="domain-loading" v-loading="true"/>
+    <div v-if="!this.result" class="profile-loading" v-loading="true"/>
     <el-card v-else class="profile-card">
-      <div style="display: flex; flex-direction: row; justify-content: space-between; align-items: center">
-        <div class="profile-title">
-          Files
-        </div>
-        <el-button v-if="this.result&&this.result.length>0&&!isDelete" round class="profile-delete" @click="openDelete">
-          Delete multiple
-        </el-button>
-        <div v-if="isDelete">
-          <el-button round class="profile-delete" @click="onCancelDelete">Cancel</el-button>
-          <el-button round class="profile-delete-btn" @click="onDeleteMult">Delete</el-button>
-        </div>
+      <div class="profile-title">
+        Music NFT
       </div>
       <div class="divider"/>
 
       <!--   empty   -->
       <div v-if="!this.result || this.result.length<=0" class="profile-empty">
         <div class="profile-text">
-          You haven't uploaded any file yet
+          You haven't mint any music NFT
         </div>
-        <el-button type="warning" round class="profile-btn" @click="goHome">Upload your first file</el-button>
+        <el-button type="warning" round class="profile-btn" @click="goMint">Mint your first NFT</el-button>
       </div>
 
       <!--   data   -->
       <div v-else class="profile-date">
-        <div class="list-item" v-for="(item) in this.result" :key="item.url">
-          <div style="display:flex; flex-direction: row; align-items: center">
-            <input v-if="isDelete" style="padding: 15px; margin-right: 15px" :id="item.url" :value="item" type="checkbox" v-model="checkedDeletes"/>
-            <template>
-              <img v-if="isImage(renderName(item.type))" class="go-upload-list-item-img" :src="item.url" alt="">
-              <update-icon v-else class="go-upload-list-item-img" name="file"/>
-            </template>
-            <div class="go-upload-list-item-name">
-              <a :href="item.url" target="_blank">
-                {{ renderName(item.name) }}
-              </a>
+        <el-card v-for="item in this.result" :key="item.id" class="card-item"
+                 :style="{backgroundImage: 'url(' + item.cover + ')'}">
+          <div class="music-card" @click="goPlay(item.play)">
+            <div class="card-item-li">
+              <span class="card-item-title">No.</span>
+              <span class="card-item-text">{{ item.id }}</span>
             </div>
-          </div>
-
-          <span>{{ renderTimestamp(item.time) }}</span>
-
-          <div>
-            <span class="go-upload-list-item-delete" @click="onCopy(item.url)">
-              <update-icon name="copy"></update-icon>
-            </span>
-            <span v-if="item.showProgress" class="go-upload-list-item-delete">
-              <update-icon class="icon-loading" name="loading"></update-icon>
-            </span>
-            <span v-else-if="!isDelete" class="go-upload-list-item-delete" @click="onDelete(item)">
-              <update-icon name="close"></update-icon>
+            <div class="card-item-li card-item-text">
+              <span>Author: </span><span>{{ renderAccountShort(item.author) }}</span>
+            </div>
+            <div class="card-item-li card-item-text">
+              <span>Name: </span><span>{{ item.name }}</span>
+            </div>
+            <div class="card-item-text card-item-describe">
+              <span>{{ item.describe }}</span>
+            </div>
+            <span class="card-item-time">
+              {{ renderTimestamp(item.time) }}
             </span>
           </div>
-        </div>
+        </el-card>
       </div>
     </el-card>
   </div>
 </template>
 
 <script>
-import {ethers} from "ethers";
-import UpdateIcon from "../components/icon";
-import {getUploadByAddress, deleteFile, deleteFiles} from '@/utils/profile';
-
-const copy = require('clipboard-copy')
-const hexToString = (h) => ethers.utils.toUtf8String(h);
+import {getAuthorMusicsByAddress} from "@/utils/web3";
 
 export default {
   name: 'Profile',
   data: () => {
     return {
-      name: "",
       result: null,
-      isDelete: false,
-      checkedDeletes: []
     };
   },
-  components: { UpdateIcon },
   computed: {
     chainConfig() {
       return this.$store.state.chainConfig;
@@ -104,122 +79,31 @@ export default {
         year: "numeric",
       });
     },
-    renderName(name) {
-      return hexToString(name);
+    renderAccountShort(account) {
+      return (
+          account.substring(0, 6) +
+          "..." +
+          account.substring(account.length - 4, account.length)
+      );
     },
-    goHome() {
-      this.$router.push({path: "/"});
+    goMint() {
+      this.$router.push({path: "/mint"});
+    },
+    goPlay(url) {
+      window.open(url, '_target');
     },
     onSearch() {
-      const { FileBoxController} = this.$store.state.chainConfig;
-      if (!FileBoxController) {
+      const {W3MusicNFT} = this.$store.state.chainConfig;
+      if (!W3MusicNFT) {
         return;
       }
-      getUploadByAddress(FileBoxController, this.$route.params.address)
+      getAuthorMusicsByAddress(W3MusicNFT, this.$route.params.address)
           .then(value => {
             this.result = value;
           })
           .catch(() => {
             this.result = [];
           });
-    },
-    onCopy(url){
-      copy(url);
-      this.$notify({
-        title: 'Success',
-        message: 'Copy Success',
-        type: 'success'
-      });
-    },
-    onDelete(item) {
-      const { FileBoxController} = this.$store.state.chainConfig;
-      if (!FileBoxController) {
-        return;
-      }
-      item.showProgress = true;
-      deleteFile(FileBoxController, item.name)
-          .then((v) => {
-            if (v) {
-              this.result = this.result.filter(value => item !== value);
-              this.$notify({
-                title: 'Success',
-                message: 'Delete Success',
-                type: 'success'
-              });
-            } else {
-              item.showProgress = false;
-              this.$notify({
-                title: 'Error',
-                message: 'Delete Fail',
-                type: 'error'
-              });
-            }
-          })
-          .catch(() => {
-            item.showProgress = false;
-            this.$notify({
-              title: 'Error',
-              message: 'Delete Fail',
-              type: 'error'
-            });
-          });
-    },
-    openDelete() {
-      this.isDelete = true;
-    },
-    onCancelDelete() {
-      this.isDelete = false;
-      this.checkedDeletes = [];
-    },
-    onDeleteMult() {
-      const { FileBoxController} = this.$store.state.chainConfig;
-      if (!FileBoxController) {
-        return;
-      }
-      if (this.checkedDeletes.length > 0) {
-        const names = [];
-        for(const item of this.checkedDeletes) {
-          item.showProgress = true;
-          names.push(item.name);
-        }
-        deleteFiles(FileBoxController, names)
-            .then((v) => {
-              if (v) {
-                for(const item of this.checkedDeletes) {
-                  this.result = this.result.filter(value => item !== value);
-                }
-                this.onCancelDelete();
-                this.$notify({
-                  title: 'Success',
-                  message: 'Delete Success',
-                  type: 'success'
-                });
-              } else {
-                for(const item of this.checkedDeletes) {
-                  item.showProgress = false;
-                }
-                this.$notify({
-                  title: 'Error',
-                  message: 'Delete Fail',
-                  type: 'error'
-                });
-              }
-            })
-            .catch(() => {
-              for(const item of this.checkedDeletes) {
-                item.showProgress = false;
-              }
-              this.$notify({
-                title: 'Error',
-                message: 'Delete Fail',
-                type: 'error'
-              });
-            });
-      }
-    },
-    isImage(type) {
-      if (!type) {return;}
-      return type.includes('image');
     },
   }
 }
@@ -230,11 +114,12 @@ export default {
 @import "../assets/styles/mixins.scss";
 @import "../assets/styles/vars.scss";
 
-.domain-loading {
+.profile-loading {
   min-width: 40vw;
   min-height: 50vh;
 }
-.domain-loading >>> .el-loading-mask{
+
+.profile-loading >>> .el-loading-mask {
   background: transparent !important;
 }
 
@@ -266,6 +151,7 @@ export default {
   align-items: center;
   height: 240px;
 }
+
 .profile-text {
   font-size: 18px;
   color: #221F33;
@@ -277,29 +163,10 @@ export default {
   font-size: 18px;
   border: 0;
 }
+
 .profile-btn:focus,
 .profile-btn:hover {
   background-color: #52DEFFBB;
-}
-
-.profile-delete {
-  color: #52DEFF;
-  font-size: 16px;
-}
-.profile-delete:focus,
-.profile-delete:hover {
-  color: #52DEFF;
-}
-.profile-delete-btn {
-  background-color: #52DEFF;
-  font-size: 16px;
-  border: 0;
-  color: #ffffff;
-}
-.profile-delete-btn:focus,
-.profile-delete-btn:hover {
-  background-color: #52DEFFBB;
-  color: #ffffff;
 }
 
 .profile-date {
@@ -308,37 +175,59 @@ export default {
   flex-wrap: wrap;
 }
 
-.list-item {
+.card-item {
+  border-radius: 16px;
+  margin-right: 30px;
+  margin-bottom: 30px;
+  width: 300px;
+  background-size: cover;
+}
+.card-item >>> .el-card__body {
+  padding: 0 !important;
+}
+
+.music-card {
   display: flex;
-  width: 100%;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin: 10px 0;
-  padding: 15px;
-  border: 1px solid rgba(35,46,63,.4);
-}
-.go-upload-list-item-img {
-  width: 80px;
-  height: 80px;
-}
-.go-upload-list-item-name {
-  font-size: 19px;
-  font-weight: bold;
-  margin-left: 25px;
-  width: 190px;
-  text-align: left;
-}
-.go-upload-list-item-delete {
-  font-size: 20px;
-  width: 30px;
-  height: 30px;
+  flex-direction: column;
+  align-items: flex-start;
   cursor: pointer;
-  padding: 15px;
+  padding: 20px;
+  background-color: rgba(220, 220, 220, 0.5);
 }
-.icon-loading {
-  animation: rotating 2s infinite linear;
+
+.card-item-li {
+  padding: 6px 0;
+  width: 100%;
+  text-align: left;
+  border-bottom: 1px solid #000000;
 }
+
+.card-item-title {
+  font-size: 15px;
+  color: #000000;
+  line-height: 15px;
+  font-family: AlibabaPuHuiTiB;
+}
+
+.card-item-text {
+  font-size: 13px;
+  color: #000000;
+  line-height: 15px;
+  font-family: AlibabaPuHuiTiR;
+}
+
+.card-item-describe {
+  padding: 6px 0;
+  height: 200px;
+}
+.card-item-time {
+  font-size: 10px;
+  color: rgba(0, 0, 0, 0.9);
+  line-height: 10px;
+  align-self: end;
+  font-family: AlibabaPuHuiTiR;
+}
+
 @keyframes rotating {
   0% {
     transform: rotate(0deg)
