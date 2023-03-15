@@ -1,6 +1,6 @@
 <template>
   <div>
-    <w3q-tip style="width: 100vw" bgColor="#52DEFF" fontColor="#ffffff" :fontSize="isMobile? '12px' : '15px'"/>
+    <w3q-tip style="width: 100vw" bgColor="#AC2D30" fontColor="#ffffff" :fontSize="isMobile? '12px' : '15px'"/>
 
     <div id="app">
       <el-container>

@@ -33,25 +33,26 @@ export default {
 }
 
 .title {
-  font-size: 30px;
-  color: #333333;
-  margin-bottom: 55px;
-  margin-top: 30px;
-  line-height: 50px;
+  font-size: 26px;
+  color: #221F33;
+  line-height: 41px;
+  margin-bottom: 35px;
+  margin-top: 50px;
+  font-family: AlibabaPuHuiTiB;
 }
 
 .profile-btn {
-  background-color: #52DEFF;
-  margin-top: 15px;
-  font-size: 23px;
-  width: 190px;
-  height: 50px;
+  background: #AC2D30;
+  font-size: 15px;
+  width: 120px;
+  height: 42px;
   border: 1px solid transparent;
-  border-radius: 35px !important;
+  border-radius: 20px !important;
+  font-family: AlibabaPuHuiTiM;
 }
 .profile-btn:focus,
 .profile-btn:hover {
   border: 1px solid transparent;
-  background-color: #52DEFFBB;
+  background-color: #AC2D30BB;
 }
 </style>

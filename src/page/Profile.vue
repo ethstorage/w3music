@@ -19,7 +19,7 @@
       <div v-else class="profile-date">
         <el-card v-for="item in this.result" :key="item.id" class="card-item"
                  :style="{backgroundImage: 'url(' + item.cover + ')'}">
-          <div class="music-card" @click="goPlay(item.play)">
+          <div class="music-card" @click.stop="goPlay(item.play)">
             <div class="card-item-li">
               <span class="card-item-title">No.</span>
               <span class="card-item-text">{{ item.id }}</span>

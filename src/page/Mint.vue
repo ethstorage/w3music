@@ -124,12 +124,12 @@ export default {
 }
 
 .mint-title {
-  font-size: 30px;
-  color: black;
-  line-height: 30px;
-  margin-top: 60px;
-  margin-bottom: 60px;
-  font-family: AlibabaPuHuiTiM;
+  font-size: 26px;
+  color: #221F33;
+  line-height: 41px;
+  margin-bottom: 50px;
+  margin-top: 35px;
+  font-family: AlibabaPuHuiTiB;
 }
 
 .mint-item {
@@ -150,7 +150,7 @@ export default {
 
 .mint-item-input {
   margin-left: 15px;
-  width: 330px;
+  width: 320px;
 }
 
 .mint-item-icon {
@@ -162,17 +162,18 @@ export default {
 }
 
 .mint-button {
-  background: #52DEFF;
-  margin-top: 30px;
-  font-size: 18px;
-  width: 150px;
-  height: 40px;
+  background: #AC2D30;
+  margin-top: 50px;
+  font-size: 15px;
+  width: 120px;
+  height: 42px;
   border: 1px solid transparent;
-  border-radius: 35px !important;
+  border-radius: 20px !important;
+  font-family: AlibabaPuHuiTiM;
 }
 .mint-button:hover {
-  border: 1px solid #cccccc;
-  background: rgba(82, 222, 255, 0.9);
+  border: 1px solid transparent;
+  background-color: #AC2D30BB;
 }
 .mint-button:disabled {
   border: 1px solid #cccccc !important;

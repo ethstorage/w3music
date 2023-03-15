@@ -39,9 +39,9 @@ $family-sans-serif: KGBrokenVesselsSketch;
   background: transparent;
 }
 .nav-container a {
-  color: #212121;
+  color: #221F33;
   font-size: 18px;
-  font-family: AlibabaPuHuiTiR;
+  font-family: AlibabaPuHuiTiM;
 }
 .navbar-item {
   padding: 0.8rem 1.5rem;
@@ -55,7 +55,7 @@ a.navbar-item.is-active,
 .navbar-link:focus-within,
 .navbar-link:hover,
 .navbar-link.is-active {
-  color: #52DEFF!important;
+  color: #AC2D30!important;
   background-color:transparent!important;
 }
 :focus {

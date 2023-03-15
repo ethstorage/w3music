@@ -10,6 +10,8 @@
     <div v-else class="user">
       <div class="account">
         {{ this.accountShort }}
+        &nbsp;|&nbsp;
+        {{ this.networkId === 3334 ? "Galileo Testnet": "Mainnet" }}
       </div>
       <div class="favorite" @click.stop="goProfile"/>
     </div>
@@ -203,17 +205,17 @@ export default {
 }
 
 .btn-connect {
-  transition: all 0.1s ease 0s;
   width: 120px;
   height: 44px;
   color: #ffffff;
   font-size: 18px;
   border: 0;
-  background: #52DEFF;
+  background: #AC2D30;
   border-radius: 36px;
+  font-family: AlibabaPuHuiTiM;
 }
 .btn-connect:hover {
-  background-color: #52DEFF90;
+  background-color: #AC2D3090;
   border: 0;
 }
 </style>
