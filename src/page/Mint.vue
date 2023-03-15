@@ -1,7 +1,7 @@
 <template>
   <div class="mint">
     <div class="mint-title">
-      Mint your music nft
+      Mint your music NFT
     </div>
     <div class="mint-item">
       <span class="mint-item-label">Music Name</span>
@@ -170,14 +170,12 @@ export default {
   border: 1px solid transparent;
   border-radius: 35px !important;
 }
-
 .mint-button:hover {
   border: 1px solid #cccccc;
   background: rgba(82, 222, 255, 0.9);
 }
-
 .mint-button:disabled {
-  border: 1px solid #cccccc;
-  background: #cccccc;
+  border: 1px solid #cccccc !important;
+  background: #cccccc !important;
 }
 </style>

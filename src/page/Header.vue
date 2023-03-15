@@ -6,8 +6,8 @@
       </b-navbar-item>
     </template>
     <template #end>
-      <b-navbar-item tag="router-link" to="/upload">Upload</b-navbar-item>
       <b-navbar-item tag="router-link" to="/mint">Mint</b-navbar-item>
+      <b-navbar-item tag="router-link" to="/upload">Upload</b-navbar-item>
       <b-navbar-item class="connection" tag="div">
         <Wallet/>
       </b-navbar-item>

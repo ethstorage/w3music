@@ -14,7 +14,7 @@ export default {
   name: 'Home',
   methods: {
     goUpload() {
-      this.$router.push({path: "/upload"});
+      this.$router.push({path: "/mint"});
     }
   }
 }

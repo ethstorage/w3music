@@ -15,7 +15,7 @@
         <el-footer class="footer">
           <div class="footer-layout">
             <el-row>
-              <a href="https://github.com/ethstorage/w3box" target="_blank">
+              <a href="https://github.com/ethstorage/w3music" target="_blank">
                 <img class="footer-img" src="@/assets/git.png">
               </a>
               <a href="https://twitter.com/EthStorage" target="_blank">
