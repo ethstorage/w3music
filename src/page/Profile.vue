@@ -158,7 +158,7 @@ export default {
 }
 
 .profile-btn {
-  background-color: #52DEFF;
+  background-color: #AC2D30;
   margin-top: 15px;
   font-size: 18px;
   border: 0;
@@ -166,7 +166,7 @@ export default {
 
 .profile-btn:focus,
 .profile-btn:hover {
-  background-color: #52DEFFBB;
+  background-color: #AC2D30BB;
 }
 
 .profile-date {
@@ -217,10 +217,12 @@ export default {
 }
 
 .card-item-describe {
-  padding: 6px 0;
+  padding: 6px 0 0;
   height: 200px;
+  overflow: hidden;
 }
 .card-item-time {
+  margin-top: 5px;
   font-size: 10px;
   color: rgba(0, 0, 0, 0.9);
   line-height: 10px;
