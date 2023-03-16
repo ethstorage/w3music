@@ -4,25 +4,25 @@
       Mint your music NFT
     </div>
     <div class="mint-item">
-      <span class="mint-item-label">Music Name</span>
+      <span class="mint-item-label">Name</span>
       <el-input class="mint-item-input" v-model="name"/>
       <div class="mint-item-icon"/>
     </div>
     <div class="mint-item">
-      <span class="mint-item-label">Music Describe</span>
+      <span class="mint-item-label">Describe</span>
       <el-input class="mint-item-input" v-model="describe"/>
       <div class="mint-item-icon"/>
     </div>
 
     <div class="mint-item">
-      <span class="mint-item-label">Music File</span>
+      <span class="mint-item-label">File</span>
       <el-select v-model="file" class="mint-item-input" placeholder="select the uploaded music file">
         <el-option v-for="item in musics" :key="item" :label="item" :value="item"></el-option>
       </el-select>
       <i class="el-icon-paperclip mint-item-icon" @click="onUploadMusic"></i>
     </div>
     <div class="mint-item">
-      <span class="mint-item-label">Music Cover</span>
+      <span class="mint-item-label">Cover</span>
       <el-select v-model="cover" class="mint-item-input" placeholder="select the uploaded image file">
         <el-option v-for="item in covers" :key="item" :label="item" :value="item"></el-option>
       </el-select>
@@ -141,7 +141,7 @@ export default {
 }
 
 .mint-item-label {
-  width: 120px;
+  width: 80px;
   font-size: 16px;
   color: #212121;
   text-align: left;
@@ -178,5 +178,46 @@ export default {
 .mint-button:disabled {
   border: 1px solid #cccccc !important;
   background: #cccccc !important;
+}
+
+
+@media screen and (max-width: 500px) {
+  .mint-title {
+    font-size: 18px;
+    line-height: 30px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
+
+  .mint-item {
+    margin: 5px;
+    width: 99%;
+    justify-content: space-between;
+  }
+
+  .mint-item-label {
+    width: 70px;
+    font-size: 14px;
+  }
+
+  .mint-item-input {
+    margin-left: 3px;
+    width: auto;
+    flex-grow: 3;
+  }
+  .mint-item-input >>> .el-input__inner {
+    font-size: 14px;
+    width: 100%;
+  }
+
+  .mint-item-icon {
+    width: 30px;
+    height: 30px;
+    padding: 8px;
+  }
+
+  .mint-button {
+    margin-top: 40px;
+  }
 }
 </style>

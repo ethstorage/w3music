@@ -55,4 +55,18 @@ export default {
   border: 1px solid transparent;
   background-color: #AC2D30BB;
 }
+
+@media screen and (max-width: 500px) {
+  .home-logo {
+    margin-top: 35px;
+    width: 50%;
+  }
+
+  .title {
+    font-size: 18px;
+    line-height: 30px;
+    margin-bottom: 40px;
+    margin-top: 40px;
+  }
+}
 </style>

@@ -43,6 +43,6 @@ export default class Layout {
   //     .replace("px", "")
   // );
   static isMobile() {
-    return window.matchMedia("(max-width: 420px)").matches;
+    return window.matchMedia("(max-width: 500px)").matches;
   }
 }

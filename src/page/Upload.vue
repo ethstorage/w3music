@@ -5,7 +5,7 @@
       <el-radio-button label="Image"></el-radio-button>
     </el-radio-group>
     <div class="upload-title"> {{ this.acceptText }}</div>
-    <w3q-deployer :accept="accept" :controlContract="contract" :fileContract="fileContract" style="width: 600px"/>
+    <w3q-deployer :accept="accept" :controlContract="contract" :fileContract="fileContract" class="drop" />
   </div>
 </template>
 
@@ -77,5 +77,25 @@ export default {
   line-height: 30px;
   margin-bottom: 60px;
   font-family: AlibabaPuHuiTiM;
+}
+
+.drop {
+  width: 600px;
+}
+
+@media screen and (max-width: 500px) {
+  .accept-type {
+    align-self: end;
+    margin: 30px 0 50px;
+  }
+
+  .upload-title {
+    font-size: 20px;
+    line-height: 30px;
+    margin-bottom: 30px;
+  }
+  .drop {
+    width: 80%;
+  }
 }
 </style>

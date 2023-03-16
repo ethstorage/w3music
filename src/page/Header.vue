@@ -77,7 +77,7 @@ a.navbar-item.is-active,
   background-color: transparent !important;
 }
 
-@media screen and (max-width: 420px) {
+@media screen and (max-width: 500px) {
   .logo {
     min-height: 25px;
   }

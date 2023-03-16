@@ -239,7 +239,7 @@ export default {
   }
 }
 
-@media screen and (max-width: 420px) {
+@media screen and (max-width: 500px) {
   .profile-card {
     padding: 0;
     margin-top: 5px;
@@ -248,5 +248,10 @@ export default {
   .profile-date {
     justify-content: center;
   }
+
+  .card-item {
+   margin: 10px auto;
+  }
+
 }
 </style>
