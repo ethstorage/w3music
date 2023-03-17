@@ -1,11 +1,11 @@
 <template>
   <div class="upload">
-    <el-radio-group v-model="acceptIndex" :disabled="acceptType" class="accept-type">
+    <el-radio-group v-model="acceptIndex" :disabled="acceptType !== undefined" class="accept-type">
       <el-radio-button label="Music"></el-radio-button>
       <el-radio-button label="Image"></el-radio-button>
     </el-radio-group>
     <div class="upload-title"> {{ this.acceptText }}</div>
-    <w3q-deployer :accept="accept" :controlContract="contract" :fileContract="fileContract" class="drop" />
+    <w3q-deployer :accept="accept" :controlContract="contract" :fileContract="fileContract" class="drop" :onSuccess="onSuccess"/>
   </div>
 </template>
 
@@ -48,6 +48,16 @@ export default {
   methods: {
     goProfile() {
       this.$router.push({path: "/address/" + this.currentAccount});
+    },
+    onSuccess() {
+      if(this.acceptType) {
+        this.$destroy();
+        this.$router.back();
+        this.$message({
+          message: 'Upload File Success',
+          type: 'success'
+        });
+      }
     }
   },
   mounted() {

@@ -112,6 +112,10 @@ export default {
       this.$router.push({path: "/upload/img"});
     }
   },
+  activated () {
+    this.$asyncComputed.covers.update();
+    this.$asyncComputed.musics.update();
+  }
 }
 </script>
 
