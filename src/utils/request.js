@@ -128,11 +128,17 @@ export const request = async ({
         break;
       }
 
+      const gasPrice = await fileContract.provider.getGasPrice();
+      const estimatedGas = await fileContract.estimateGas.writeChunk(fileType, index, hexName, hexData, {
+        value: ethers.utils.parseEther(cost.toString())
+      });
       const tx = await fileContract.writeChunk(fileType, index, hexName, hexData, {
+        gasPrice: gasPrice.mul(6).div(5).toString(),
+        gasLimit: estimatedGas.mul(6).div(5).toString(),
         value: ethers.utils.parseEther(cost.toString())
       });
       console.log(`Transaction Id: ${tx.hash}`);
-      const receipt = await tx.wait();
+      const receipt = await tx.wait(1);
       if (!receipt.status) {
         uploadState = false;
         break;

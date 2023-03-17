@@ -66,6 +66,9 @@ export default {
     },
     isDisabled() {
       return !this.name || !this.file;
+    },
+    currentAccount() {
+      return this.$store.state.account;
     }
   },
   asyncComputed: {
@@ -93,6 +96,7 @@ export default {
       // this.$router.push({path: "/address/" + this.currentAccount});
       this.loading = true;
       const result = await mint(this.contract, this.file, this.name, this.describe, this.cover);
+      this.loading = false;
       if (result) {
         this.$message({
           message: 'Mint Success',
@@ -102,8 +106,8 @@ export default {
         this.describe = '';
         this.cover = '';
         this.file = '';
+        await this.$router.push({path: "/address/" + this.currentAccount});
       }
-      this.loading = false;
     },
     onUploadMusic() {
       this.$router.push({path: "/upload/music"});

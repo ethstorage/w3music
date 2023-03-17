@@ -24,11 +24,13 @@
               <span class="card-item-title">No.</span>
               <span class="card-item-text">{{ item.id }}</span>
             </div>
-            <div class="card-item-li card-item-text">
-              <span>Author: </span><span>{{ renderAccountShort(item.author) }}</span>
+            <div class="card-item-li">
+              <span class="card-item-title">Author: </span>
+              <span class="card-item-text">{{ renderAccountShort(item.author) }}</span>
             </div>
-            <div class="card-item-li card-item-text">
-              <span>Name: </span><span>{{ item.name }}</span>
+            <div class="card-item-li">
+              <span class="card-item-title">Name: </span>
+              <span class="card-item-text">{{ item.name }}</span>
             </div>
             <div class="card-item-text card-item-describe">
               <span>{{ item.describe }}</span>
@@ -65,7 +67,7 @@ export default {
       }
     }
   },
-  created() {
+  activated () {
     this.onSearch();
   },
   methods: {
@@ -177,9 +179,8 @@ export default {
 
 .card-item {
   border-radius: 16px;
-  margin-right: 30px;
-  margin-bottom: 30px;
-  width: 300px;
+  margin: 15px;
+  width: 320px;
   background-size: cover;
 }
 .card-item >>> .el-card__body {
@@ -191,35 +192,39 @@ export default {
   flex-direction: column;
   align-items: flex-start;
   cursor: pointer;
-  padding: 20px;
-  background-color: rgba(220, 220, 220, 0.5);
+  padding: 10px 20px 20px;
+  background-color: rgba(255, 255, 255, 0.4);
 }
 
 .card-item-li {
-  padding: 6px 0;
+  padding: 10px 0;
   width: 100%;
   text-align: left;
   border-bottom: 1px solid #000000;
 }
 
 .card-item-title {
-  font-size: 15px;
+  font-size: 13px;
   color: #000000;
-  line-height: 15px;
-  font-family: AlibabaPuHuiTiB;
+  line-height: 13px;
+  font-family: AlibabaPuHuiTiM;
 }
 
 .card-item-text {
   font-size: 13px;
   color: #000000;
-  line-height: 15px;
+  line-height: 13px;
   font-family: AlibabaPuHuiTiR;
 }
 
 .card-item-describe {
-  padding: 6px 0 0;
+  padding: 12px 0 0;
+  line-height: 20px;
   height: 200px;
   overflow: hidden;
+  font-size: 13px;
+  color: #000000;
+  font-family: AlibabaPuHuiTiM;
 }
 .card-item-time {
   margin-top: 5px;
@@ -252,6 +257,5 @@ export default {
   .card-item {
    margin: 10px auto;
   }
-
 }
 </style>
