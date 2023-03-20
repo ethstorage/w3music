@@ -29,6 +29,10 @@ export default {
   name: 'w3q-deployer',
   components: { UploadDragger, UploadList },
   props: {
+    account: {
+      type: String,
+      default: ""
+    },
     controlContract: {
       type: String,
       default: ""
@@ -139,6 +143,7 @@ export default {
     normalizeReq (file) {
       const { uid } = file;
       this.reqs[uid] = {
+        account: this.account,
         contractAddress: this.controlContract,
         fileContractAddress: this.fileContract,
         fileType: this.accept === 'audio/*' ? 0 : 1,

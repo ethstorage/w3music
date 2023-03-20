@@ -5,7 +5,9 @@
       <el-radio-button label="Image"></el-radio-button>
     </el-radio-group>
     <div class="upload-title"> {{ this.acceptText }}</div>
-    <w3q-deployer :accept="accept" :controlContract="contract" :fileContract="fileContract" class="drop" :onSuccess="onSuccess"/>
+    <w3q-deployer :accept="accept" :account="this.account"
+                  :controlContract="contract" :fileContract="fileContract"
+                  class="drop" :onSuccess="onSuccess"/>
   </div>
 </template>
 
@@ -21,6 +23,9 @@ export default {
     };
   },
   computed: {
+    account() {
+      return this.$store.state.account;
+    },
     contract() {
       if (this.$store.state.chainConfig && this.$store.state.chainConfig.chainID) {
         const {W3MusicController} = this.$store.state.chainConfig;

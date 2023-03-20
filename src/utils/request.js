@@ -60,6 +60,7 @@ const clearOldFile = async (fileContract, chunkSize, hexName) => {
 }
 
 export const request = async ({
+  account,
   contractAddress,
   fileContractAddress,
   fileType,
@@ -68,15 +69,6 @@ export const request = async ({
   onError,
   onProgress
 }) => {
-  let account;
-  try {
-    account = await window.ethereum.enable();
-  } catch (e) {
-    onError(new Error("Can't get Account"));
-    return;
-  }
-
-
   const rawFile = file.raw;
   // file name
   const name = rawFile.name;
@@ -106,8 +98,8 @@ export const request = async ({
   for (const index in chunks) {
     const chunk = chunks[index];
     let cost = 0;
-    if (fileSize > 24 * 1024 - 626) {
-      cost = Math.floor((fileSize + 626) / 1024 / 24);
+    if (fileSize > 24 * 1024 - 426) {
+      cost = Math.floor((fileSize + 426) / 1024 / 24);
     }
     const hexData = '0x' + chunk.toString('hex');
     const localHash = '0x' + sha3(chunk);
@@ -120,21 +112,14 @@ export const request = async ({
 
     try {
       // file is remove or change
-      const balance = await fileContract.provider.getBalance(account[0]);
+      const balance = await fileContract.provider.getBalance(account);
       if(balance.lte(ethers.utils.parseEther(cost.toString()))){
         // not enough balance
         uploadState = false;
         notEnoughBalance = true;
         break;
       }
-
-      const gasPrice = await fileContract.provider.getGasPrice();
-      const estimatedGas = await fileContract.estimateGas.writeChunk(fileType, index, hexName, hexData, {
-        value: ethers.utils.parseEther(cost.toString())
-      });
       const tx = await fileContract.writeChunk(fileType, index, hexName, hexData, {
-        gasPrice: gasPrice.mul(6).div(5).toString(),
-        gasLimit: estimatedGas.mul(6).div(5).toString(),
         value: ethers.utils.parseEther(cost.toString())
       });
       console.log(`Transaction Id: ${tx.hash}`);
