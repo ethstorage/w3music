@@ -2,7 +2,7 @@
   <div class="home">
     <img class="home-logo" src="../assets/home.png"/>
     <p class="title">
-      Create an Music NFT fully on-chain.
+      Create a MUSIC NFT fully on-chain.
     </p>
     <el-button type="warning" round class="profile-btn" @click="goUpload">Start</el-button>
   </div>
