@@ -95,12 +95,13 @@ export const request = async ({
 
   let uploadState = true;
   let notEnoughBalance = false;
+  let cost = ethers.BigNumber.from(0);
+  if (fileSize > 24 * 1024 - 330) {
+    cost = Math.floor((fileSize + 330) / 1024 / 24);
+    cost = ethers.utils.parseEther(cost.toString());
+  }
   for (const index in chunks) {
     const chunk = chunks[index];
-    let cost = 0;
-    if (fileSize > 24 * 1024 - 426) {
-      cost = Math.floor((fileSize + 426) / 1024 / 24);
-    }
     const hexData = '0x' + chunk.toString('hex');
     const localHash = '0x' + sha3(chunk);
     const hash = await fileContract.getChunkHash(hexName, index);
@@ -113,17 +114,17 @@ export const request = async ({
     try {
       // file is remove or change
       const balance = await fileContract.provider.getBalance(account);
-      if(balance.lte(ethers.utils.parseEther(cost.toString()))){
+      if(balance.lte(cost)){
         // not enough balance
         uploadState = false;
         notEnoughBalance = true;
         break;
       }
       const tx = await fileContract.writeChunk(fileType, index, hexName, hexData, {
-        value: ethers.utils.parseEther(cost.toString())
+        value: cost
       });
       console.log(`Transaction Id: ${tx.hash}`);
-      const receipt = await tx.wait(1);
+      const receipt = await tx.wait(2);
       if (!receipt.status) {
         uploadState = false;
         break;
