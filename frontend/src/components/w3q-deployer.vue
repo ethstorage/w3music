@@ -138,20 +138,21 @@ export default {
         percent: 0,
         uid: sha3(rawFile.name + rawFile.size + rawFile.type),
         status: 'init', // value list: init pending success failure
-        raw: rawFile
+        raw: rawFile,
+        fileType: this.accept === 'audio/*' ? 0 : 1,
       };
       // concat does not change the existing arrays, but instead returns a new array
       this.files.push(file);
       return file;
     },
     normalizeReq (file) {
-      const { uid } = file;
+      const {uid, fileType} = file;
       this.reqs[uid] = {
         chunkLength: this.chunkLength,
         account: this.account,
         contractAddress: this.controlContract,
         fileContractAddress: this.fileContract,
-        fileType: this.accept === 'audio/*' ? 0 : 1,
+        fileType: fileType,
         file: file,
         onSuccess: this.handleSuccess.bind(this, file),
         onError: this.handleError.bind(this, file),

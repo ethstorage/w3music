@@ -4,7 +4,7 @@
       <el-radio-button label="Music"></el-radio-button>
       <el-radio-button label="Image"></el-radio-button>
     </el-radio-group>
-    <div class="upload-title"> {{ this.acceptText }}</div>
+    <div class="upload-title">{{ this.acceptText }}</div>
     <w3q-deployer :accept="accept" :account="this.account"
                   :controlContract="contract" :fileContract="fileContract"
                   class="drop" :onSuccess="onSuccess"/>
