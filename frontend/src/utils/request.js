@@ -125,7 +125,7 @@ export const request = async ({
         value: cost
       });
       console.log(`Transaction Id: ${tx.hash}`);
-      const receipt = await tx.wait(2);
+      const receipt = await tx.wait();
       if (!receipt.status) {
         uploadState = false;
         break;

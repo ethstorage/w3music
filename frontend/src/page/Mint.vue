@@ -16,14 +16,14 @@
 
     <div class="mint-item">
       <span class="mint-item-label">File</span>
-      <el-select v-model="file" class="mint-item-input" placeholder="select the uploaded music file">
+      <el-select v-model="file" class="mint-item-input" placeholder="Select the uploaded music file">
         <el-option v-for="item in musics" :key="item" :label="item" :value="item"></el-option>
       </el-select>
       <i class="el-icon-paperclip mint-item-icon" @click="onUploadMusic"></i>
     </div>
     <div class="mint-item">
       <span class="mint-item-label">Cover</span>
-      <el-select v-model="cover" class="mint-item-input" placeholder="select the uploaded image file">
+      <el-select v-model="cover" class="mint-item-input" placeholder="Select the uploaded image file">
         <el-option v-for="item in covers" :key="item" :label="item" :value="item"></el-option>
       </el-select>
       <i class="el-icon-paperclip mint-item-icon" @click="onUploadCover"/>
