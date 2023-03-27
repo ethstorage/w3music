@@ -2085,7 +2085,7 @@ contract SimpleW3music {
 
     W3MusicNft public w3music;
 
-    mapping(bytes => bool) public isExit;
+    mapping(bytes => bool) public isExist;
     mapping(address => bytes[]) public userMusics;
     mapping(address => bytes[]) public userCovers;
 
@@ -2101,13 +2101,13 @@ contract SimpleW3music {
     function writeChunk(uint256 fileType, uint256 chunkId, bytes memory name, bytes calldata data) public payable virtual {
         bytes memory pathName = w3music.getPathName(msg.sender, name);
         w3music.writeChunk{value: msg.value}(pathName, chunkId, data);
-        if(!isExit[pathName]) {
+        if(!isExist[pathName]) {
             if(fileType == 0) {
                 userMusics[msg.sender].push(name);
             } else {
                 userCovers[msg.sender].push(name);
             }
-            isExit[pathName] = true;
+            isExist[pathName] = true;
         }
     }
 

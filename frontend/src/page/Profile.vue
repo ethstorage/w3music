@@ -10,7 +10,7 @@
       <!--   empty   -->
       <div v-if="!this.result || this.result.length<=0" class="profile-empty">
         <div class="profile-text">
-          You haven't mint any music NFT
+          You haven't minted any music NFT
         </div>
         <el-button type="warning" round class="profile-btn" @click="goMint">Mint your first NFT</el-button>
       </div>
