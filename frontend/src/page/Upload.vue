@@ -69,7 +69,24 @@ export default {
     if (this.acceptType && this.acceptType === 'img') {
       this.acceptIndex = 'Images';
     }
-  }
+    if (window.performance.navigation.type === 1) {
+      // console.log("页面被刷新")
+    } else if (window.ethereum && window.ethereum.isMetaMask) {
+      this.$msgbox({
+        title: 'TIPS',
+        message: '<div style="text-align: left; font-size: 14px">' +
+            'Due to the caching of user transaction history by Metamask and its limit on the cache size, it is easy to exceed the limit when uploading large files by constructing multiple data upload transactions, which may cause Metamask to fail to start.<br/>' +
+            'Therefore, we recommend that you do not upload files larger than <span style="color: red">3MB</span> and manually clear the cache after uploading to avoid any potential issues with your Metamask.' +
+            '</div>',
+        dangerouslyUseHTMLString: true,
+        confirmButtonText: 'OK',
+        type: 'warning',
+        center: true,
+        closeOnClickModal: false,
+        closeOnPressEscape: false,
+      });
+    }
+  },
 }
 </script>
 

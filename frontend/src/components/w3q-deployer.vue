@@ -88,7 +88,33 @@ export default {
     onInputChange (e) {
       // e.target.files is pseudo array, need to convert to real array
       const rawFiles = Array.from(e.target.files);
-      this.uploadFiles(rawFiles);
+      const state = this.checkFileSize(rawFiles);
+      if (state) {
+        this.uploadFiles(rawFiles);
+      } else {
+        // file too big
+        this.$msgbox({
+          title: 'TIPS',
+          message: '<div style="text-align: left; font-size: 14px">' +
+              'Due to the caching of user transaction history by Metamask and its limit on the cache size, it is easy to exceed the limit when uploading large files by constructing multiple data upload transactions, which may cause Metamask to fail to start.<br/>' +
+              'Therefore, we recommend that you do not upload files larger than <span style="color: red">3MB</span> and manually clear the cache after uploading to avoid any potential issues with your Metamask.' +
+              '</div>',
+          dangerouslyUseHTMLString: true,
+          confirmButtonText: 'OK',
+          type: 'warning',
+          center: true,
+          closeOnClickModal: false,
+          closeOnPressEscape: false,
+        });
+      }
+    },
+    checkFileSize(rawFiles) {
+      for (const rawFile of rawFiles) {
+        if (rawFile.size > 3 * 1024 * 1024) {
+          return false;
+        }
+      }
+      return true;
     },
     uploadFiles (rawFiles) {
       rawFiles = this.clearFile(rawFiles);
