@@ -44,7 +44,7 @@ export default {
       return this.$route.params.type;
     },
     acceptText() {
-      return this.acceptIndex === 'Music' ? 'Upload your music files.' : 'Upload your image files.';
+      return this.acceptIndex === 'Music' ? 'Upload your music files' : 'Upload your image files';
     },
     accept() {
       return this.acceptIndex === 'Music' ? "audio/*" : 'image/*';

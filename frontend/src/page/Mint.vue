@@ -9,7 +9,7 @@
       <div class="mint-item-icon"/>
     </div>
     <div class="mint-item">
-      <span class="mint-item-label">Describe</span>
+      <span class="mint-item-label">Description</span>
       <el-input class="mint-item-input" v-model="describe"/>
       <div class="mint-item-icon"/>
     </div>
