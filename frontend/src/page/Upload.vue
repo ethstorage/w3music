@@ -1,6 +1,6 @@
 <template>
   <div class="upload">
-    <el-radio-group v-model="acceptIndex" :disabled="acceptType !== undefined" class="accept-type">
+    <el-radio-group v-model="acceptIndex" class="accept-type">
       <el-radio-button label="Music"></el-radio-button>
       <el-radio-button label="Image"></el-radio-button>
     </el-radio-group>
@@ -13,6 +13,7 @@
 
 <script>
 import W3qDeployer from '@/components/w3q-deployer.vue';
+import {mapActions} from "vuex";
 
 export default {
   name: 'Upload',
@@ -40,6 +41,9 @@ export default {
       }
       return null;
     },
+    isShowDialog() {
+      return this.$store.state.showDialog;
+    },
     acceptType() {
       return this.$route.params.type;
     },
@@ -51,6 +55,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(["setShowDialog"]),
     goProfile() {
       this.$router.push({path: "/address/" + this.currentAccount});
     },
@@ -65,15 +70,14 @@ export default {
       }
     }
   },
-  mounted() {
+  created() {
     if (this.acceptType && this.acceptType === 'img') {
-      this.acceptIndex = 'Images';
+      this.acceptIndex = 'Image';
     }
-    if (window.performance.navigation.type === 1) {
-      // console.log("页面被刷新")
-    } else if (window.ethereum && window.ethereum.isMetaMask) {
+    if (!this.isShowDialog && window.ethereum && window.ethereum.isMetaMask) {
+      this.setShowDialog(true);
       this.$msgbox({
-        title: 'TIPS',
+        title: 'WARNING',
         message: '<div style="text-align: left; font-size: 14px">' +
             'Due to the caching of user transaction history by Metamask and its limit on the cache size, it is easy to exceed the limit when uploading large files by constructing multiple data upload transactions, which may cause Metamask to fail to start.<br/>' +
             'Therefore, we recommend that you do not upload files larger than <span style="color: red">3MB</span> and manually clear the cache after uploading to avoid any potential issues with your Metamask.' +

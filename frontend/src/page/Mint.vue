@@ -110,10 +110,10 @@ export default {
       }
     },
     onUploadMusic() {
-      this.$router.push({path: "/upload/music"});
+      this.$router.push({ name: 'Upload', params: { type: 'music' }});
     },
     onUploadCover() {
-      this.$router.push({path: "/upload/img"});
+      this.$router.push({ name: 'Upload', params: { type: 'img' }});
     }
   },
   activated () {

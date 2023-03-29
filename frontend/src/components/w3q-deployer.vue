@@ -94,7 +94,7 @@ export default {
       } else {
         // file too big
         this.$msgbox({
-          title: 'TIPS',
+          title: 'WARNING',
           message: '<div style="text-align: left; font-size: 14px">' +
               'Due to the caching of user transaction history by Metamask and its limit on the cache size, it is easy to exceed the limit when uploading large files by constructing multiple data upload transactions, which may cause Metamask to fail to start.<br/>' +
               'Therefore, we recommend that you do not upload files larger than <span style="color: red">3MB</span> and manually clear the cache after uploading to avoid any potential issues with your Metamask.' +

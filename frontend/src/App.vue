@@ -9,7 +9,7 @@
         </el-header>
 
         <el-main :style="'min-height:'+ (fullHeight-195) +'px;'">
-          <keep-alive max="10">
+          <keep-alive :include="['Mint']">
             <router-view :key="$route.fullPath"/>
           </keep-alive>
         </el-main>
