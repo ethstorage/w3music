@@ -67,7 +67,7 @@ export default {
       }
     }
   },
-  activated () {
+  created () {
     this.onSearch();
   },
   methods: {
