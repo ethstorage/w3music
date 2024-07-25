@@ -29,15 +29,15 @@ export default {
     },
     contract() {
       if (this.$store.state.chainConfig && this.$store.state.chainConfig.chainID) {
-        const {W3MusicController} = this.$store.state.chainConfig;
-        return W3MusicController;
+        const {W3Music} = this.$store.state.chainConfig;
+        return W3Music;
       }
       return null;
     },
     fileContract() {
       if (this.$store.state.chainConfig && this.$store.state.chainConfig.chainID) {
-        const {W3MusicNFT} = this.$store.state.chainConfig;
-        return W3MusicNFT;
+        const {FlatDirectory} = this.$store.state.chainConfig;
+        return FlatDirectory;
       }
       return null;
     },

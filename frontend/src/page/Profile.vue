@@ -95,11 +95,11 @@ export default {
       window.open(url, '_target');
     },
     onSearch() {
-      const {W3MusicNFT} = this.$store.state.chainConfig;
-      if (!W3MusicNFT) {
+      const {W3Music} = this.$store.state.chainConfig;
+      if (!W3Music) {
         return;
       }
-      getAuthorMusicsByAddress(W3MusicNFT, this.$route.params.address)
+      getAuthorMusicsByAddress(W3Music, this.$route.params.address)
           .then(value => {
             this.result = value;
           })

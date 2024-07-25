@@ -74,8 +74,7 @@ export default {
       return this.controlContract !== null;
     },
     chunkLength() {
-      return (window.ethereum && window.ethereum.isTrust)
-          ? 24 * 1024 : 475 * 1024;
+      return 24 * 1024;
     }
   },
   methods: {

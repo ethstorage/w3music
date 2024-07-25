@@ -82,7 +82,6 @@ export const request = async ({
   if (fileSize > chunkLength) {
     const chunkSize = Math.ceil(fileSize / chunkLength);
     chunks = bufferChunk(content, chunkSize);
-    fileSize = fileSize / chunkSize;
   } else {
     chunks.push(content);
   }
@@ -95,12 +94,6 @@ export const request = async ({
   }
 
   let uploadState = true;
-  let notEnoughBalance = false;
-  let cost = ethers.BigNumber.from(0);
-  if (fileSize > 24 * 1024 - 330) {
-    cost = Math.floor((fileSize + 330) / 1024 / 24);
-    cost = ethers.utils.parseEther(cost.toString());
-  }
   for (const index in chunks) {
     const chunk = chunks[index];
     const hexData = '0x' + chunk.toString('hex');
@@ -114,16 +107,7 @@ export const request = async ({
 
     try {
       // file is remove or change
-      const balance = await fileContract.provider.getBalance(account);
-      if(balance.lte(cost)){
-        // not enough balance
-        uploadState = false;
-        notEnoughBalance = true;
-        break;
-      }
-      const tx = await fileContract.writeChunk(fileType, index, hexName, hexData, {
-        value: cost
-      });
+      const tx = await fileContract.writeChunk(fileType, index, hexName, hexData);
       console.log(`Transaction Id: ${tx.hash}`);
       const receipt = await tx.wait();
       if (!receipt.status) {
@@ -138,14 +122,10 @@ export const request = async ({
     }
   }
   if (uploadState) {
-    const url = "https://" + fileContractAddress + ".w3q-g.w3link.io/" + account + "-" + name;
+    const url = "https://" + fileContractAddress + ".3336.w3link.io/" + account + "-" + name;
     onSuccess({path: url});
   } else {
-    if (notEnoughBalance) {
-      onError(new NotEnoughBalance('Not enough balance'));
-    } else {
-      onError(new Error('upload request failed!'));
-    }
+    onError(new Error('upload request failed!'));
   }
 };
 
