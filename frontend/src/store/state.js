@@ -1,5 +1,5 @@
 export const chains = [{
-  chainID: '0xa83d',
-  W3Music:'0x32BC988c0EA523441Cb1c6308ab17D8A4F9bCA17',
-  FlatDirectory: '0x302b6699C68a82F4e217787BcBcDc26116508002',
+  chainID: '0xd07',
+  W3Music:'0xccc53bCE6651Ecc0D86f1284FD859bc3563916dD',
+  FlatDirectory: '0xA43Ac148572fb48D60E114e15f095d95f6f7c4c6',
 }];

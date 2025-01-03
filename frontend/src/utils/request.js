@@ -122,7 +122,7 @@ export const request = async ({
     }
   }
   if (uploadState) {
-    const url = "https://" + fileContractAddress + ".3336.w3link.io/" + account + "-" + name;
+    const url = "https://" + fileContractAddress + ".3337.w3link.io/" + account + "-" + name;
     onSuccess({path: url});
   } else {
     onError(new Error('upload request failed!'));

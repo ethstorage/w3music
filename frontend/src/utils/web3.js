@@ -76,7 +76,7 @@ export const getAuthorMusicsByAddress = async (controller, address) => {
     const describes = result[5];
     const covers = result[6];
     for (let i = ids.length - 1; i >= 0; i--) {
-        const cover = covers[i] === '0x' ? '' : "https://" + controller + ".3336.w3link.io/" + authors[i].toLowerCase() + "-" +hexToString(covers[i]);
+        const cover = covers[i] === '0x' ? '' : "https://" + controller + ".3337.w3link.io/" + authors[i].toLowerCase() + "-" +hexToString(covers[i]);
         const music = {
             id: ids[i],
             time: new Date(parseInt(times[i], 10) * 1000),
@@ -85,7 +85,7 @@ export const getAuthorMusicsByAddress = async (controller, address) => {
             describe: hexToString(describes[i]),
             fileName: hexToString(fileNames[i]),
             cover: cover,
-            play: "https://" + controller + ".3336.w3link.io/play/" + ids[i],
+            play: "https://" + controller + ".3337.w3link.io/play/" + ids[i],
         };
         nftList.push(music);
     }
