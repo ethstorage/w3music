@@ -5,7 +5,6 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
-
 interface FlatDirectoryFactoryInterface {
     function create() external returns (address);
 }
@@ -23,7 +22,7 @@ interface IERC5018 {
     }
 
     // Large storage methods
-    function write(bytes memory name, bytes memory data) external payable;
+    function write(bytes memory name, bytes memory data) external;
 
     function read(bytes memory name) external view returns (bytes memory, bool);
 
@@ -35,15 +34,16 @@ interface IERC5018 {
     function countChunks(bytes memory name) external view returns (uint256);
 
     // Chunk-based large storage methods
-    function writeChunk(
-        bytes memory name,
-        uint256 chunkId,
-        bytes memory data
-    ) external payable;
+    function writeChunkByCalldata(bytes memory name, uint256 chunkId, bytes memory data) external;
 
-    function writeChunks(bytes memory name, uint256[] memory chunkIds, uint256[] memory sizes) external payable;
+    function writeChunksByBlobs(bytes memory name, uint256[] memory chunkIds, uint256[] memory sizes) external payable;
 
     function readChunk(bytes memory name, uint256 chunkId) external view returns (bytes memory, bool);
+
+    function readChunksPaged(bytes memory name, uint256 startChunkId, uint256 limit)
+        external
+        view
+        returns (bytes[] memory chunks);
 
     function chunkSize(bytes memory name, uint256 chunkId) external view returns (uint256, bool);
 
@@ -51,17 +51,16 @@ interface IERC5018 {
 
     function truncate(bytes memory name, uint256 chunkId) external returns (uint256);
 
-    function refund() external;
-
-    function destruct() external;
-
     function getChunkHash(bytes memory name, uint256 chunkId) external view returns (bytes32);
 
     function getChunkHashesBatch(FileChunk[] memory fileChunks) external view returns (bytes32[] memory);
 
     function getChunkCountsBatch(bytes[] memory names) external view returns (uint256[] memory);
 
-    function getUploadInfo(bytes memory name) external view returns (StorageMode mode, uint256 chunkCount, uint256 storageCost);
+    function getUploadInfo(bytes memory name)
+        external
+        view
+        returns (StorageMode mode, uint256 chunkCount, uint256 storageCost);
 }
 
 contract SimpleW3Music is ERC721Enumerable {
@@ -83,25 +82,21 @@ contract SimpleW3Music is ERC721Enumerable {
     mapping(address => bytes[]) public userCovers;
     mapping(bytes => bool) public isExist;
 
-    constructor(address _factory, string memory _chainId) ERC721('W3MUSIC', 'MUSIC'){
+    constructor(address _factory, string memory _chainId) ERC721("W3MUSIC", "MUSIC") {
         FlatDirectoryFactoryInterface factory = FlatDirectoryFactoryInterface(_factory);
         fileFD = IERC5018(factory.create());
         chainId = _chainId;
     }
 
-    function mint(
-        bytes memory fileName_,
-        bytes memory musicName_,
-        bytes memory describe_,
-        bytes memory cover_
-    ) public {
+    function mint(bytes memory fileName_, bytes memory musicName_, bytes memory describe_, bytes memory cover_) public {
         uint256 tokenId = totalSupply();
         _safeMint(msg.sender, tokenId);
         musicInfos[tokenId] = MusicInfo(block.timestamp, msg.sender, fileName_, musicName_, describe_, cover_);
     }
 
     function getAuthorMusics(address author)
-        public view
+        public
+        view
         returns (
             uint256[] memory ids,
             uint256[] memory times,
@@ -132,36 +127,38 @@ contract SimpleW3Music is ERC721Enumerable {
         }
     }
 
-    function tokenURI(uint256 tokenId) public override view returns (string memory) {
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
         MusicInfo memory music = musicInfos[tokenId];
-        if(music.createTime <= 0){
-            return 'The token does not exist!';
+        if (music.createTime <= 0) {
+            return "The token does not exist!";
         }
-        return string(abi.encodePacked(
-                '{',
+        return string(
+            abi.encodePacked(
+                "{",
                 '"name":"', music.musicName, '",',
                 '"describe":"', music.describe, '",',
                 '"fileName":"', music.fileName, '",',
                 '"cover":"', music.cover, '",',
                 '"time":"', music.createTime, '",',
                 '"author":"', music.author, '",',
-                '}'
-            ));
+                "}"
+            )
+        );
     }
 
     function play(uint256 tokenId) external view returns (bytes memory) {
         MusicInfo memory music = musicInfos[tokenId];
-        if(music.createTime <= 0){
-            return bytes('The token does not exist!');
+        if (music.createTime <= 0) {
+            return bytes("The token does not exist!");
         }
         return abi.encodePacked(
             getHeader(),
             '<style>.nft-bg{background-size:cover;background-image: url("', getUrl(getPathName(music.author, music.cover)), '");}</style></head>',
             '<body><div class="nft nft-bg"><div class="cover">',
-            '<p class="text">', music.musicName, '</p>',
-            '<p class="describe">', music.describe, '</p>',
+            '<p class="text">', music.musicName, "</p>",
+            '<p class="describe">', music.describe, "</p>",
             '<audio controls src="', getUrl(getPathName(music.author, music.fileName)), '" />',
-            '</div></div></body></html>'
+            "</div></div></body></html>"
         );
     }
 
@@ -171,29 +168,28 @@ contract SimpleW3Music is ERC721Enumerable {
 
     function getUrl(bytes memory name) public view returns (string memory) {
         // https://0xf208000076869ca535575baddd9152ac0a05986c.3333.w3link.io/app.html
-        return string(abi.encodePacked(
-                'https://',
+        return string(
+            abi.encodePacked(
+                "https://",
                 Strings.toHexString(uint256(uint160(address(fileFD))), 20),
                 ".",
                 chainId,
-                '.w3link.io/',
+                ".w3link.io/",
                 name
-            ));
-    }
-
-    function getPathName(address author, bytes memory name) public pure returns (bytes memory) {
-        return abi.encodePacked(
-            Strings.toHexString(uint256(uint160(author)), 20), '-', name
+            )
         );
     }
 
+    function getPathName(address author, bytes memory name) public pure returns (bytes memory) {
+        return abi.encodePacked(Strings.toHexString(uint256(uint160(author)), 20), "-", name);
+    }
 
     // file
-    function writeChunk(uint256 fileType, uint256 chunkId, bytes memory name, bytes calldata data) public payable virtual {
+    function writeChunk(uint256 fileType, uint256 chunkId, bytes memory name, bytes calldata data) public virtual {
         bytes memory pathName = getPathName(msg.sender, name);
-        fileFD.writeChunk{value: msg.value}(pathName, chunkId, data);
-        if(!isExist[pathName]) {
-            if(fileType == 0) {
+        fileFD.writeChunkByCalldata(pathName, chunkId, data);
+        if (!isExist[pathName]) {
+            if (fileType == 0) {
                 userMusics[msg.sender].push(name);
             } else {
                 userCovers[msg.sender].push(name);

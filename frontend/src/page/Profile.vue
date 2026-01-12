@@ -95,11 +95,11 @@ export default {
       window.open(url, '_target');
     },
     onSearch() {
-      const {W3Music} = this.$store.state.chainConfig;
+      const {W3Music, FlatDirectory} = this.$store.state.chainConfig;
       if (!W3Music) {
         return;
       }
-      getAuthorMusicsByAddress(W3Music, this.$route.params.address)
+      getAuthorMusicsByAddress(W3Music, FlatDirectory, this.$route.params.address)
           .then(value => {
             this.result = value;
           })
